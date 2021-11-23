@@ -20,9 +20,9 @@ Before({timeout}, async function() {
     this.browserBuild();
 });
 
-// After({timeout}, async function() {
-//     await this.browserExit();
-// });
+After({timeout}, async function() {
+    await this.browserExit();
+});
 
 Given('the {word} page', {timeout}, async function(page) {
     const pages = {
@@ -32,11 +32,32 @@ Given('the {word} page', {timeout}, async function(page) {
 
     assert((pages[page] != null), 'Page not supported!');
     await this.browserNavigate(pages[page]);
-});
+    if (page=="home"){
+    await this.headless.wait(webdriver.until.elementLocated(webdriver.By.id("qc-cmp2-ui")), timeout, 2000)
+}});
 When('the ladder button is clicked', async function () {
     const playButton = await this.headless.findElement(webdriver.By.className("button mainmenu3"))
     await playButton.click()
     assert(await this.headless)
+})
+When('the i accept privacy', async function () {
+    //const button = await  this.headless.findElement(webdriver.By.id("qc-cmp2-ui"));
+    const button = await  this.headless.findElement(webdriver.By.className("css-1wrbm"));
+    //const button = await  this.headless.findElement(webdriver.By.css(".css-1wrbm"));
+    //console.log(button)
+    await button.click();
+})
+Then('the privacy notice hides', async function () {
+    try {
+        await this.headless.findElement(webdriver.By.id("qc-cmp2-ui"))
+        assert(false)
+    }
+    catch (ex)
+    {
+        assert(true)
+    }
+
+    //assert(popup.getCssValue("display")=="none")
 })
 Then('the url should be the ladder link', async function (){
     assert(await this.headless.getCurrentUrl()=="https://play.pokemonshowdown.com/ladder")

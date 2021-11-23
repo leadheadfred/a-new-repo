@@ -16,7 +16,7 @@ class CustomWorld {
      */
     browserBuild() {
         const options = new chrome.Options()
-            //.headless()
+            .headless()
             .setAcceptInsecureCerts(true)
             .windowSize({width: 1920, height: 1200});
 
@@ -32,6 +32,7 @@ class CustomWorld {
     async browserExit() {
         await this.headless.quit();
     }
+
 
     /**
      * Navigates to specified URL in the 'headless' Chrome browser
